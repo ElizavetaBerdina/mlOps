@@ -1,59 +1,53 @@
-# ML Service
-
-## Quick start guide  
-
-#### 1. Для установки зависимостей использовать **poetry**
+##  Как начать работу и как это вообще работает
 
 
-#### 2. Для запуска кода запустить main.py
+#### 1. Для запуска кода запустить run_api.py
 ```commandline
-python3 main.py
+python3 run_api.py
 ```
-
 ## Примеры взаимодействия с сервисом
 
-#### 1. Возвращает список доступных для обучения типов моделей  
+#### 1. Возвращает список классов моделей, доступных для обучения 
 **GET**  
-> http://localhost:5000/api/v1/model_classes  
+> http://localhost:4000/api/model_classes  
 
-#### 2. Возвращает список обученных моделей готовых для предсказаний  
+#### 2. Возвращает список обученных моделей
 **GET**  
-> http://localhost:5000/api/v1/models  
+> http://localhost:4000/api/models  
 
 #### 3. Обучение модели  
 **POST**  
-> http://localhost:5000/api/v1/models 
+> http://localhost:4000/api/models/fit
 > 
-body:  
 ```
-{  
-    "model_type": "Ridge",  
-    "params": "{'alpha': 0.001}",  
-    "x": [[0.0,0.0],[1.0,0.0],[2.0,3.0]],  
-    "y": [0.0,1.0,2.0]  
-}  
+    "model_class": Regression,    
+    "model_name": Regression_1, 
+    "params": None,  
+    "data_with_target_path": swagger_api/data_sample/data_regression.csv
+    
 ```
-
-#### 4. Предсказание обученной моделью  
+ 
+#### 4. Получение predict 
 **POST**  
-> http://localhost:5000/api/v1/models/predict  
+> http://localhost:4000/api/models/predict  
 > 
-body: 
 ``` 
-{  
-    "model_name": "Ridge(alpha=0.001)",  
-    "x": [[0.0,0.0],[1.0,0.0],[2.0,3.0]]  
-}  
+     "model_name": Regression_1
 ```
 
-#### 5. Удаление обученной модели  
-**DELETE**  
-> http://localhost:5000/api/v1/models  
+#### 5. Возвращает параметры модели 
+**POST**  
+> http://localhost:4000/api/models/get_params 
 > 
-body:  
+``` 
+     "model_name": Regression_1
 ```
-{  
-    "model_name": "Ridge(alpha=0.001)"  
-}  
+
+#### 6. Удаление модели  
+**DELETE**  
+> http://localhost:4000/api/models/delete  
+> 
+``` 
+     "model_name": Regression_1
 ```
 
