@@ -1,7 +1,10 @@
 ##  Как начать работу и как это вообще работает
 
-
-#### 1. Для запуска кода запустить run_api.py
+#### 1. Установить зависимости
+```commandline
+python -m pip install -r requirements. txt
+```
+#### 2. Для запуска кода запустить run_api.py
 ```commandline
 python3 run_api.py
 ```
