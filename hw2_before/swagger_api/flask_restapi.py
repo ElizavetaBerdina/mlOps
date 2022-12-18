@@ -7,12 +7,16 @@ from swagger_api.main_models import get_params, delete_model
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
+import yaml
+import psycopg2
 import os
 
-POSTGRES_HOST = os.environ['POSTGRES_HOST']
-POSTGRES_DB = os.environ['POSTGRES_DB']
-POSTGRES_USER = os.environ['POSTGRES_USER']
-POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
+with open("bd_config.yaml") as f:
+    config = yaml.safe_load(f)
+POSTGRES_HOST = config["POSTGRES_HOST"]
+POSTGRES_DB = config["POSTGRES_DB"]
+POSTGRES_USER = config["POSTGRES_USER"]
+POSTGRES_PASSWORD = config["POSTGRES_PASSWORD"]
 
 POSTGRES_CONN_STRING = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 

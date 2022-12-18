@@ -1,0 +1,4 @@
+POSTGRES_HOST: localhost
+POSTGRES_DB: postgres_db
+POSTGRES_USER: postgres_db_user
+POSTGRES_PASSWORD: postgres_db_password
