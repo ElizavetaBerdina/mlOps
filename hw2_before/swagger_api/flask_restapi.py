@@ -6,23 +6,10 @@ from swagger_api.main_models import fit_model, get_preds
 from swagger_api.main_models import get_params, delete_model
 import numpy as np
 import pandas as pd
-from sqlalchemy import create_engine
-import yaml
-import psycopg2
-import os
-
-with open("bd_config.yaml") as f:
-    config = yaml.safe_load(f)
-POSTGRES_HOST = config["POSTGRES_HOST"]
-POSTGRES_DB = config["POSTGRES_DB"]
-POSTGRES_USER = config["POSTGRES_USER"]
-POSTGRES_PASSWORD = config["POSTGRES_PASSWORD"]
-
-POSTGRES_CONN_STRING = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
+from bd_init import engine_postgres
 
 
 def exist_models():
-    engine_postgres = create_engine(POSTGRES_CONN_STRING)
     __modelsList = pd.read_sql_query(
         """
         SELECT DISTINCT "model_name"
@@ -64,7 +51,6 @@ class models_store(Resource):
 @api.route("/models/list")
 class model_list(Resource):
     def get(self):
-        engine_postgres = create_engine(POSTGRES_CONN_STRING)
         __models = pd.read_sql_query(
             """
             SELECT
@@ -130,7 +116,6 @@ class models_fit(Resource):
             train_target = df['target']
             np.save('train_data.npy', train_data)
             model_name = fit_model(args.model_class, args.model_name, params, train_data, train_target)
-            engine_postgres = create_engine(POSTGRES_CONN_STRING)
             engine_postgres.execution_options(autocommit=True).execute(
                 f"""
                               INSERT INTO public.models ("model_name", "model_classes", "params")
@@ -213,7 +198,6 @@ class delete(Resource):
         try:
             args = delete_parser.parse_args(strict=True)
             delete_model(args.model_name)
-            engine_postgres = create_engine(POSTGRES_CONN_STRING)
             engine_postgres.execution_options(autocommit=True).execute(
                 f"""
                                DELETE
